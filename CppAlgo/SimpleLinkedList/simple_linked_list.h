@@ -2,6 +2,11 @@
 
 typedef void* POS;
 
+
+/*
+	Simple Linked List (단순 연결 리스트)
+*/
+
 template <class T> class SimpleLinkedList {
 public:
 	enum Exception {
