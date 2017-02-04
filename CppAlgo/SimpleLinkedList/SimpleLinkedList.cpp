@@ -3,16 +3,20 @@
 
 #include "stdafx.h"
 #include "simple_linked_list.h"
+#include <iostream>
 
 template SimpleLinkedList<int>;
 
-void dump_list_int(const SimpleLinkedList<int>& list) 
+void dump_list_int(SimpleLinkedList<int>& list) 
 {
-	POS pos = list.get_head_position();
-	while (pos) {
-		printf("%d ", list.get_next(pos));
+	SimpleLinkedList<int>::iterator it = list.begin();
+
+	while (it) {		
+		std::cout << list.at(it) << " " << std::endl;
+		it = list.next(it);
 	}
-	printf("\n");
+
+	std::cout << std::endl;
 }
 
 int main()
@@ -20,25 +24,28 @@ int main()
 	SimpleLinkedList<int> list;
 
 	try {
-		list.get_head();
+		std::cout << "Rise Exception test." << std::endl;
+		list.front();
 
 	} catch (SimpleLinkedList<int>::Exception e) {
-		if (e == SimpleLinkedList<int>::INVALID_POS) {
-			printf("catched, Invalid Pointer %d\n", e);
+		if (e == SimpleLinkedList<int>::INVALID_POS) {			
+			std::cout << "catched, Invalid Pointer " << e << std::endl;
 		}
-		else if (e == SimpleLinkedList<int>::EMPTY_LIST) {
-			printf("catched, Empty List %d\n", e);
+		else if (e == SimpleLinkedList<int>::EMPTY_LIST) {			
+			std::cout << "catched, Empty List " << e << std::endl;
 		}
 	}
+	std::cout << std::endl;
 
-	list.add_head(3);
-	list.add_head(2);
-	list.add_head(1);
-
+	std::cout << "Insert three elements as front." << std::endl;
+	list.push_front(3);
+	list.push_front(2);
+	list.push_front(1);
 	dump_list_int(list);
 
-	POS pos = list.find(3);
-	printf("find index 3 is %d \n", list.get_at(pos));
+	std::cout << "Remove one element as front." << std::endl;
+	list.pop_front();
+	dump_list_int(list);
 
     return 0;
 }
