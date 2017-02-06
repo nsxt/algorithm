@@ -5,8 +5,6 @@
 
 - SimpleLinkedList 와 대부분 유사하나 CircularLinkedList 는 Tail 개념이 없다.
   항상 마지막 노드는 Head 와 연결 되어있다.
-  Circular 자료구조의 특성상 미리 자료구조의 크기가 설정되어야 한다.
-
 */
 template<class T> class CircularLinkedList 
 {
@@ -30,7 +28,7 @@ public:
 		node_head_->next = node_head_;
 	}
 
-	~CirsularLinkedList()
+	~CircularLinkedList()
 	{
 		int n = size();
 		for (int i = 0; i < n; i++) {
@@ -81,6 +79,24 @@ public:
 	void set(iterator pos, const T& value)
 	{
 		at(pos) = value;
+	}
+
+	/**
+		Iterator
+	**/
+	iterator begin() const
+	{
+		if (size_ <= 0) {
+			return nullptr;
+		}
+
+		return static_cast<iterator>(node_head_->next);
+	}
+
+	iterator end() const
+	{
+		// 'Simple Linked List' does not need to be implemented.
+		throw NO_IMPLEMENTED;
 	}
 
 
@@ -136,14 +152,21 @@ public:
 			throw INVALID_POS;
 		}
 
-		if (node->next == node_head_) {
-			throw INVALID_POS;
+		if (size_ <= 0) {
+			throw EMPTY_LIST;
 		}
 
-		Node* del_node = node->next;
-		node->next = del_node->next;
-		
-		delete del_node;
+		// Delete last node
+		if (node->next == node_head_ && size_ == 1) {
+			node_head_->next = node_head_;
+			delete node;
+
+		} else {
+			Node* del_node = node->next;
+			node->next = del_node->next;
+			delete del_node;
+		}
+
 		size_--;
 	}
 	
@@ -183,6 +206,21 @@ public:
 		throw NO_IMPLEMENTED;
 	}
 
+	bool is_front(iterator pos)
+	{
+		if (size_ <= 0) {
+			throw EMPTY_LIST;
+		}
+
+		Node* node = static_cast<Node*>(pos);
+
+		if (node == nullptr) {
+			throw INVALID_POS;
+		}
+
+		return (node_head_->next == node);
+	}
+
 
 	/**
 		Operations
@@ -198,7 +236,7 @@ public:
 		}
 
 		Node* rt = node_head_->next;
-		int n = ;
+		int n = size_;
 		for (int i = 1; i < n; i++) {
 			rt = rt->next;
 		}
