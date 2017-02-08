@@ -8,7 +8,7 @@ template<class T> class SimpleLinkedList
 public:
 	typedef void* iterator;
 
-	enum Exception { INVALID_POS, EMPTY_LIST, NO_IMPLEMENTED };
+	enum Exception { INVALID_POS, EMPTY_LIST, NOT_IMPLEMENTED };
 
 	struct Node {
 		T data;
@@ -43,7 +43,7 @@ public:
 		Element access
 	**/
 
-	T& front()
+	T front() const
 	{
 		if (size_ <= 0) {
 			throw EMPTY_LIST;
@@ -52,10 +52,10 @@ public:
 		return node_head_->next->data;
 	}
 
-	T& back()
+	// Not Implemented ('Circular Linked List' does not need to be implemented.)
+	T back() const
 	{
-		// 'Circular Linked List' does not need to be implemented.
-		throw NO_IMPLEMENTED;
+		throw NOT_IMPLEMENTED;
 	}
 
 	T at(iterator pos) const
@@ -110,10 +110,10 @@ public:
 		return static_cast<iterator>(node_head_->next);
 	}
 
+	// Not Implemented ('Simple Linked List' does not need to be implemented.)
 	iterator end() const
 	{
-		// 'Simple Linked List' does not need to be implemented.
-		throw NO_IMPLEMENTED;
+		throw NOT_IMPLEMENTED;
 	}
 
 
@@ -127,21 +127,21 @@ public:
 		insert(node_head_, value);
 	}
 
+	// Not Implemented ('Simple Linked List' does not need to be implemented.)
 	void push_back(const T& value)
 	{
-		// 'Simple Linked List' does not need to be implemented.
-		throw NO_IMPLEMENTED;
+		throw NOT_IMPLEMENTED;
 	}
 
 	void pop_front()
 	{
 		erase(node_head_);
 	}
-
+	
+	// Not Implemented ('Simple Linkged List' does not need to be implemented.)
 	void pop_back()
 	{
-		// 'Simple Linkged List' does not need to be implemented.
-		throw NO_IMPLEMENTED;
+		throw NOT_IMPLEMENTED;
 	}
 
 	iterator insert(iterator pos, const T& value)
@@ -222,10 +222,10 @@ public:
 		return static_cast<iterator>(node->next);
 	}
 
+	// Not Implemented ('Simple Linkged List' does not need to be implemented.)
 	iterator prev(iterator pos)
-	{
-		// 'Simple Linkged List' does not need to be implemented.
-		throw NO_IMPLEMENTED;
+	{		
+		throw NOT_IMPLEMENTED;
 	}
 
 
