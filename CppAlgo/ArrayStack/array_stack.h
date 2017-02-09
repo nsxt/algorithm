@@ -36,7 +36,7 @@ public:
 
 	void push(const T& value) 
 	{
-		if (top_ >= elems_size_) {
+		if (top_ >= max_size_) {
 			throw STACK_OVERFLOW;
 		}
 
@@ -61,6 +61,6 @@ public:
 
 protected:
 	T elems[N];
-	const size_t elems_size_ = N;
+	const size_t max_size_ = N;
 	size_t top_;
 };
