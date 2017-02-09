@@ -47,7 +47,7 @@ public:
 		Element access
 	**/
 
-	T& front()
+	T front() const
 	{
 		if (size_ <= 0) {
 			throw EMPTY_LIST;
@@ -56,7 +56,7 @@ public:
 		return node_head_->next->data;
 	}
 
-	T& back()
+	T back() const
 	{		
 		if (size_ <= 0) {
 			throw EMPTY_LIST;
