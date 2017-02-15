@@ -6,14 +6,33 @@
 :: 0 인덱스는 사용하지 않는다.
 
 */
-template<class T, size_t N> class ArrayStack
+template<class T> class ArrayStack
 {
 public:
-	enum Exception { STACK_OVERFLOW, STACK_UNDERFLOW, STACK_EMPTY };
+	enum Exception { 
+		STACK_OVERFLOW, STACK_UNDERFLOW, STACK_EMPTY, 
+		MEMALLOC_FAILED, INVALID_STACK_SIZE 
+	};
 
 public:
-	ArrayStack() : top_(0) {}
-	~ArrayStack() {}
+	ArrayStack(const int size = 100) : top_(-1) 
+	{
+		if (size <= 0) {
+			throw INVALID_STACK_SIZE;
+		}
+
+		elems = new T[size];
+		if (elems == nullptr) {
+			throw MEMALLOC_FAILED;
+		}
+
+		max_size_ = size;
+	}
+
+	~ArrayStack() 
+	{
+		delete[] elems;
+	}
 
 public:
 	/**
@@ -43,24 +62,24 @@ public:
 		elems[++top_] = value;
 	}
 
-	void pop() 
+	T pop() 
 	{
 		if (empty()) {
 			throw STACK_UNDERFLOW;
 		}
 
-		top_--;
+		return elems[top_--];
 	}
 
 
 	/**
 		Capacity
 	**/
-	bool empty() const { return (top_ <= 0); }
-	size_t size() const { return top_; }
+	bool empty() const { return (top_ < 0); }
+	size_t size() const { return (top_ + 1); }
 
 protected:
-	T elems[N];
-	const size_t max_size_ = N;
-	size_t top_;
+	T* elems;
+	int max_size_;
+	int top_;
 };

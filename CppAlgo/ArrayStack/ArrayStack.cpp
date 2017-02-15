@@ -5,14 +5,13 @@
 #include <iostream>
 #include "array_stack.h"
 
-template ArrayStack<int, 10>;
-typedef ArrayStack<int, 10> ArrayStackType;
+template ArrayStack<int>;
+typedef ArrayStack<int> ArrayStackType;
 
 void print_stack(ArrayStackType& stack)
 {
 	while (!stack.empty()) {
-		std::cout << stack.top() << " ";
-		stack.pop();
+		std::cout << stack.pop() << " ";		
 	}
 
 	std::cout << "\n" << std::endl;
@@ -20,7 +19,7 @@ void print_stack(ArrayStackType& stack)
 
 int main()
 {
-	ArrayStackType stack;
+	ArrayStackType stack(5);
 
 	std::cout << "[ Array Stack Test ]\n" << std::endl;
 	try {

@@ -1,5 +1,7 @@
 #pragma once
 #include "../Common/util.h"
+#include "../ListStack/list_stack.h"
+#include "../ArrayStack/array_stack.h"
 
 /*
 [ Hoare partition scheme ]
@@ -28,55 +30,156 @@ algorithm partition(A, lo, hi) is
 
 	swap A[i] with A[j]
 */
-
 template<class T>
-size_t partition(T a[], size_t left, size_t right, T& pivot)
+int partition(T a[], int n)
 {
-	size_t i = left;
-	size_t j = right;
+	T& v = a[n - 1];
+	int i = -1;
+	int j = n - 1;
 
 	while (true) {
-		while ((i <= j) && (a[i++] < pivot));
-		while ((j >= i) && (a[j--] > pivot));
+		while (a[++i] < v);
+		while ((i >= j) && (a[--j] > v));
 
-		if (i >= j) {
+		if (i >= j) 
 			break;
-		}
-		else {
-			nsxtalgo::swap(a[i], a[j]);
-		}
+		
+		nsxtalgo::swap(a[i], a[j]);
 	}
 	
-	nsxtalgo::swap(a[i], pivot);
+	nsxtalgo::swap(a[i], v);
 
 	return i;
 }
 
+/*
+	Random Pivot partition
+*/
+template<class T>
+int partition_random(T a[], int n)
+{
+	int pivot = int(((double)rand() / (double)RAND_MAX)*(double)(n - 1));
+	nsxtalgo::swap(a[pivot], a[n - 1]);
+	return partition(a, n);
+}
+
+/*
+	Recursion version
+*/
 template<class T>
 void quick_sort(T a[], int n)
 {
-	T v, t;
-	int i, j;
-
-	if (n > 1)	// 재귀호출의 종료조건 
+	if (n > 1)
 	{
-		v = a[n - 1];  // v는 pivot value
-		i = -1;		// i는 왼쪽부터 검색할 위치 
-		j = n - 1;    // j는 오른쪽부터 검색할 위치 
-		while (true)
-		{
-			while (a[++i] < v);  // 축값보다 큰 값이 있나 검사
-			while ((j > 0) && (a[--j] > v));
-			if (i >= j) break;
-			t = a[i];		// 두 값을 교환 
-			a[i] = a[j];
-			a[j] = t;
-		}
-		t = a[i];   // 축값과 축값의 위치에 있는 값을 바꿈 
-		a[i] = a[n - 1];
-		a[n - 1] = t;
-		quick_sort(a, i);  // 왼쪽 구간 
-		quick_sort(a + i + 1, n - i - 1);  // 오른쪽 구간 
+		int i = partition(a, n);
+		quick_sort(a, i);
+		quick_sort(a + i + 1, n - i - 1);
 	}
 }
 
+
+/*
+	List Stack version
+*/
+template<class T>
+void quick_sort_liststack(T a[], int n)
+{
+	int i;
+	int l, r;  // 스택에 저장할 구간의 정보 
+	ListStack<int> stack;
+
+	l = 0;
+	r = n - 1;
+	stack.push(r);
+	stack.push(l);
+
+	while (!stack.empty())
+	{
+		l = stack.top(); stack.pop();
+		r = stack.top(); stack.pop();
+
+		if (r - l + 1 > 1)   // 종료조건 r-l+1은 구간의 길이 
+		{
+			i = partition(a + l, r - l + 1);
+
+			// right
+			stack.push(r);		// r
+			stack.push(i + 1);  // l
+
+			// left
+			stack.push(i - 1);	// r
+			stack.push(l);		// l
+		}
+	}
+}
+
+
+/*
+	Array Stack version
+*/
+template<class T>
+void quick_sort_arraystack(T a[], int n)
+{
+	int i;
+	int l, r;  // 스택에 저장할 구간의 정보 
+	ArrayStack<int> stack(n*2+2);
+
+	l = 0;
+	r = n - 1;
+	stack.push(r);
+	stack.push(l);
+
+	while (!stack.empty())
+	{
+		l = stack.pop();
+		r = stack.pop();
+
+		if (r - l + 1 > 1)   // 종료조건 r-l+1은 구간의 길이 
+		{
+			i = partition(a + l, r - l + 1);
+
+			// right
+			stack.push(r);		// r
+			stack.push(i + 1);  // l
+
+			// left
+			stack.push(i - 1);	// r
+			stack.push(l);		// l
+		}
+	}
+}
+
+/*
+	Random Pivot version
+*/
+template<class T>
+void quick_sort_random(T a[], int n)
+{
+	int i;
+	int l, r;  // 스택에 저장할 구간의 정보 
+	ArrayStack<int> stack(n * 2 + 2);
+
+	l = 0;
+	r = n - 1;
+	stack.push(r);
+	stack.push(l);
+
+	while (!stack.empty())
+	{
+		l = stack.pop();
+		r = stack.pop();
+
+		if (r - l + 1 > 1)   // 종료조건 r-l+1은 구간의 길이 
+		{
+			i = partition_random(a + l, r - l + 1);
+
+			// right
+			stack.push(r);		// r
+			stack.push(i + 1);  // l
+
+								// left
+			stack.push(i - 1);	// r
+			stack.push(l);		// l
+		}
+	}
+}

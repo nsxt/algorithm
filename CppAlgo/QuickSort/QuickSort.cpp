@@ -6,7 +6,14 @@
 #include <chrono>
 #include "quick_sort.h"
 
-int array_random[] = { 1, 2, 3 };
+int array_random[] = { 5, 4, 3, 2, 1 };
+int array_copy[5];
+
+
+void copy_array(int s[], int d[], int n)
+{
+	memcpy(d, s, n * sizeof(int));
+}
 
 void print_array(const char* title, int *a, int n)
 {
@@ -19,11 +26,44 @@ void print_array(const char* title, int *a, int n)
 
 int main()
 {
+	/*
+		Recursion Quick Sort
+	*/
+	copy_array(array_random, array_copy, 5);
+	std::cout << "=========================================";
+	print_array("Before Quick Sort by recursion version...", array_copy, 5);
+	quick_sort<int>(array_copy, 5);
+	print_array("After Quick Sort by recursion version...", array_copy, 5);
+	std::cout << std::endl;
 
-	print_array("Before Insertion Sort...", array_random, 3);
-	quick_sort<int>(array_random, 3);
-	print_array("After Insertion Sort...", array_random, 3);
+	/*
+		ListStack Quick Sort
+	*/
+	copy_array(array_random, array_copy, 5);
+	std::cout << "=========================================";
+	print_array("Before Quick Sort by list stack version...", array_copy, 5);
+	quick_sort_liststack<int>(array_copy, 5);
+	print_array("After Quick Sort by list stack version...", array_copy, 5);
+	std::cout << std::endl;
 
+	/*
+		ArrayStack Quick Sort
+	*/
+	copy_array(array_random, array_copy, 5);
+	std::cout << "=========================================";
+	print_array("Before Quick Sort by array stack version...", array_copy, 5);
+	quick_sort_arraystack<int>(array_copy, 5);
+	print_array("After Quick Sort by array stack version...", array_copy, 5);
+	std::cout << std::endl;
+
+	/*
+		Random Quick Sort
+	*/
+	copy_array(array_random, array_copy, 5);
+	std::cout << "=========================================";
+	print_array("Before Quick Sort by random pivot version...", array_copy, 5);
+	quick_sort_random<int>(array_copy, 5);
+	print_array("After Quick Sort by random pivot version...", array_copy, 5);
 	std::cout << std::endl;
 
 	return 0;
