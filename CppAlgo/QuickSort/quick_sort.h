@@ -1,67 +1,53 @@
 #pragma once
+
+#include <cmath>
 #include "../Common/util.h"
 #include "../ListStack/list_stack.h"
 #include "../ArrayStack/array_stack.h"
+#include "../InsertionSort/insertion_sort.h"
 
-/*
-[ Hoare partition scheme ]
 
-algorithm quicksort(A, lo, hi) is
-	if lo < hi then
-	p := partition(A, lo, hi)
-	quicksort(A, lo, p)
-	quicksort(A, p + 1, hi)
-
-algorithm partition(A, lo, hi) is
-	pivot := A[lo]
-	i := lo - 1
-	j := hi + 1
-	loop forever
-	do
-	i := i + 1
-	while A[i] < pivot
-
-	do
-	j := j - 1
-	while A[j] > pivot
-
-	if i >= j then
-	return j
-
-	swap A[i] with A[j]
-*/
 template<class T>
-int partition(T a[], int n)
+int partition(T a[], int low, int high)
 {
-	T& v = a[n - 1];
-	int i = -1;
-	int j = n - 1;
+	T& pivot = a[high];
+	int i = low;
+	int j = high - 1;
 
 	while (true) {
-		while (a[++i] < v);
-		while ((i >= j) && (a[--j] > v));
+		for (; i < high; i++) {
+			if (a[i] > pivot)
+				break;
+		}
 
-		if (i >= j) 
+		for (; j > low; j--) {
+			if (a[j] < pivot)
+				break;
+		}
+
+		if (i >= j)
 			break;
-		
+
 		nsxtalgo::swap(a[i], a[j]);
 	}
-	
-	nsxtalgo::swap(a[i], v);
+
+	nsxtalgo::swap(a[i], pivot);
 
 	return i;
 }
 
-/*
-	Random Pivot partition
-*/
+
 template<class T>
-int partition_random(T a[], int n)
+int partition_random(T a[], int low, int high)
 {
+	int n = high - low + 1;
 	int pivot = int(((double)rand() / (double)RAND_MAX)*(double)(n - 1));
-	nsxtalgo::swap(a[pivot], a[n - 1]);
-	return partition(a, n);
+
+	nsxtalgo::swap(a[pivot + low], a[high]);
+
+	return partition(a, low, high);
 }
+
 
 /*
 	Recursion version
@@ -71,7 +57,11 @@ void quick_sort(T a[], int n)
 {
 	if (n > 1)
 	{
-		int i = partition(a, n);
+		int low = 0;
+		int high = n - 1;
+
+		int i = partition(a, low, high);
+
 		quick_sort(a, i);
 		quick_sort(a + i + 1, n - i - 1);
 	}
@@ -85,33 +75,33 @@ template<class T>
 void quick_sort_liststack(T a[], int n)
 {
 	int i;
-	int l, r;  // 스택에 저장할 구간의 정보 
+	int low, high;
 	ListStack<int> stack;
 
-	l = 0;
-	r = n - 1;
-	stack.push(r);
-	stack.push(l);
+	low = 0;
+	high = n - 1;
+
+	stack.push(high);
+	stack.push(low);
 
 	while (!stack.empty())
 	{
-		l = stack.top(); stack.pop();
-		r = stack.top(); stack.pop();
+		low = static_cast<int>(stack.pop());
+		high = static_cast<int>(stack.pop());
 
-		if (r - l + 1 > 1)   // 종료조건 r-l+1은 구간의 길이 
+		if (high - low + 1 > 1)
 		{
-			i = partition(a + l, r - l + 1);
+			i = partition(a, low, high);
 
-			// right
-			stack.push(r);		// r
-			stack.push(i + 1);  // l
-
-			// left
-			stack.push(i - 1);	// r
-			stack.push(l);		// l
+			stack.push(high);	// high
+			stack.push(i + 1);  // low
+						
+			stack.push(i-1);	// high
+			stack.push(low);	// low
 		}
 	}
 }
+
 
 
 /*
@@ -121,33 +111,34 @@ template<class T>
 void quick_sort_arraystack(T a[], int n)
 {
 	int i;
-	int l, r;  // 스택에 저장할 구간의 정보 
-	ArrayStack<int> stack(n*2+2);
+	int low, high;
+	ArrayStack<int> stack(n * 2 + 2);
 
-	l = 0;
-	r = n - 1;
-	stack.push(r);
-	stack.push(l);
+	low = 0;
+	high = n - 1;
+
+	stack.push(high);
+	stack.push(low);
 
 	while (!stack.empty())
 	{
-		l = stack.pop();
-		r = stack.pop();
+		low = static_cast<int>(stack.pop());
+		high = static_cast<int>(stack.pop());
 
-		if (r - l + 1 > 1)   // 종료조건 r-l+1은 구간의 길이 
+		if (high - low + 1 > 1)
 		{
-			i = partition(a + l, r - l + 1);
+			i = partition(a, low, high);
 
-			// right
-			stack.push(r);		// r
-			stack.push(i + 1);  // l
+			stack.push(high);	// high
+			stack.push(i + 1);  // low
 
-			// left
-			stack.push(i - 1);	// r
-			stack.push(l);		// l
+			stack.push(i - 1);	// high
+			stack.push(low);	// low
 		}
 	}
 }
+
+
 
 /*
 	Random Pivot version
@@ -156,30 +147,143 @@ template<class T>
 void quick_sort_random(T a[], int n)
 {
 	int i;
-	int l, r;  // 스택에 저장할 구간의 정보 
+	int low, high;
 	ArrayStack<int> stack(n * 2 + 2);
 
-	l = 0;
-	r = n - 1;
-	stack.push(r);
-	stack.push(l);
+	low = 0;
+	high = n - 1;
+
+	stack.push(high);
+	stack.push(low);
 
 	while (!stack.empty())
 	{
-		l = stack.pop();
-		r = stack.pop();
+		low = static_cast<int>(stack.pop());
+		high = static_cast<int>(stack.pop());
 
-		if (r - l + 1 > 1)   // 종료조건 r-l+1은 구간의 길이 
+		if (high - low + 1 > 1)
 		{
-			i = partition_random(a + l, r - l + 1);
+			i = partition_random(a, low, high);
 
-			// right
-			stack.push(r);		// r
-			stack.push(i + 1);  // l
+			stack.push(high);	// high
+			stack.push(i + 1);  // low
 
-								// left
-			stack.push(i - 1);	// r
-			stack.push(l);		// l
+			stack.push(i - 1);	// high
+			stack.push(low);	// low
+		}
+	}
+}
+
+
+/*
+Pivot Median Sort
+*/
+template<class T>
+int pivot_median_sort(T a[], int low, int high)
+{
+	int n = high - low + 1;
+
+	if (n > 1) {
+		int pivot = int(std::round(((double)n / (double)2))) + low - 1;
+
+		if (a[low] > a[pivot]) {
+			nsxtalgo::swap(a[low], a[pivot]);
+		}
+		if (a[pivot] > a[high]) {
+			nsxtalgo::swap(a[pivot], a[high]);
+		}
+		if (a[low] > a[pivot]) {
+			nsxtalgo::swap(a[low], a[pivot]);
+		}
+
+		return pivot;
+	}
+
+	return n;
+}
+
+
+/*
+	Median Sorted Pivot partition
+*/
+template<class T>
+int partition_median(T a[], int low, int high)
+{
+	int pivot = pivot_median_sort(a, low, high);
+	nsxtalgo::swap(a[pivot], a[high - 1]);
+	return partition(a, low + 1, high - 1);
+}
+
+
+/*
+	Median Pivot version
+*/
+template<class T>
+void quick_sort_median(T a[], int n)
+{
+	int i;
+	int low, high;	
+	ArrayStack<int> stack(n * 2 + 2);
+
+	low = 0;
+	high = n - 1;
+	stack.push(high);
+	stack.push(low);
+
+	while (!stack.empty())
+	{
+		low = static_cast<int>(stack.pop());
+		high = static_cast<int>(stack.pop());
+
+		if (high - low + 1 > 3)
+		{
+			i = partition_median(a, low, high);	
+
+			stack.push(high);
+			stack.push(i + 1);
+
+			stack.push(i - 1);
+			stack.push(low);
+		}
+		else {
+			pivot_median_sort(a, low, high);
+		}
+	}
+}
+
+
+/*
+	Insertion and Median version
+*/
+template<class T>
+void quick_sort_sub(T a[], int n)
+{
+	int i;
+	int low, high;
+	ArrayStack<int> stack(n * 2 + 2);
+
+	low = 0;
+	high = n - 1;
+	stack.push(high);
+	stack.push(low);
+
+	while (!stack.empty())
+	{
+		low = static_cast<int>(stack.pop());
+		high = static_cast<int>(stack.pop());
+
+		if (high - low + 1 > 10)
+		{
+			i = partition_median(a, low, high);
+
+			stack.push(high);
+			stack.push(i + 1);
+
+			stack.push(i - 1);
+			stack.push(low);
+		}
+		else {
+			insertion_sort(a + low, high - low + 1);
 		}
 	}
 }

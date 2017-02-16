@@ -45,10 +45,10 @@ public:
 		}
 	}
 
-	void pop() 
+	T pop() 
 	{
 		try {
-			slist_.pop_front();
+			return slist_.pop_front();
 		} 
 		catch (SimpleLinkedList<T>::Exception) {
 			throw STACK_UNDERFLOW;

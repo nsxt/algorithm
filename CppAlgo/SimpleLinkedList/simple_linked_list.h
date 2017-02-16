@@ -133,9 +133,9 @@ public:
 		throw NOT_IMPLEMENTED;
 	}
 
-	void pop_front()
+	T pop_front()
 	{
-		erase(node_head_);
+		return erase(node_head_);
 	}
 	
 	// Not Implemented ('Simple Linkged List' does not need to be implemented.)
@@ -167,7 +167,7 @@ public:
 	}
 
 
-	void erase(iterator pos)
+	T erase(iterator pos)
 	{
 		Node* node = static_cast<Node*>(pos);
 
@@ -182,8 +182,11 @@ public:
 		Node* del_node = node->next;
 		node->next = del_node->next;
 
+		T del_node_data = del_node->data;
 		delete del_node;
 		size_--;
+
+		return del_node_data;
 	}
 
 

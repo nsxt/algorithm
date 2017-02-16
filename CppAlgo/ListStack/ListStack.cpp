@@ -10,8 +10,7 @@ template ListStack<int>;
 void print_stack(ListStack<int>& stack)
 {
 	while (!stack.empty()) {
-		std::cout << stack.top() << " ";
-		stack.pop();
+		std::cout << stack.pop() << " ";		
 	}
 
 	std::cout << "\n" << std::endl;
