@@ -29,6 +29,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QuickSort", "QuickSort\Quic
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DistCountSort", "DistCounting\DistCounting.vcxproj", "{F2965578-E77E-4884-A1E4-87B5732452E6}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RadixSort", "RadixSort\RadixSort.vcxproj", "{C464F5FF-B22A-476F-A2F1-16D07A3A4471}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -141,6 +143,14 @@ Global
 		{F2965578-E77E-4884-A1E4-87B5732452E6}.Release|x64.Build.0 = Release|x64
 		{F2965578-E77E-4884-A1E4-87B5732452E6}.Release|x86.ActiveCfg = Release|Win32
 		{F2965578-E77E-4884-A1E4-87B5732452E6}.Release|x86.Build.0 = Release|Win32
+		{C464F5FF-B22A-476F-A2F1-16D07A3A4471}.Debug|x64.ActiveCfg = Debug|x64
+		{C464F5FF-B22A-476F-A2F1-16D07A3A4471}.Debug|x64.Build.0 = Debug|x64
+		{C464F5FF-B22A-476F-A2F1-16D07A3A4471}.Debug|x86.ActiveCfg = Debug|Win32
+		{C464F5FF-B22A-476F-A2F1-16D07A3A4471}.Debug|x86.Build.0 = Debug|Win32
+		{C464F5FF-B22A-476F-A2F1-16D07A3A4471}.Release|x64.ActiveCfg = Release|x64
+		{C464F5FF-B22A-476F-A2F1-16D07A3A4471}.Release|x64.Build.0 = Release|x64
+		{C464F5FF-B22A-476F-A2F1-16D07A3A4471}.Release|x86.ActiveCfg = Release|Win32
+		{C464F5FF-B22A-476F-A2F1-16D07A3A4471}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
