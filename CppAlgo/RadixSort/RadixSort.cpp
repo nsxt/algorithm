@@ -8,6 +8,7 @@
 
 #define MAX_SIZE 5
 unsigned long array_random[] = { 5, 4, 3, 2, 1 };
+unsigned long array_copy[MAX_SIZE];
 
 void bit_shift_test()
 {
@@ -37,6 +38,11 @@ void bit_shift_test()
 	std::cout << "z = " << std::bitset<8>(z) << " >> 1 right shift " << std::endl;
 }
 
+void copy_array(unsigned long s[], unsigned long d[], int n)
+{
+	memcpy(d, s, n * sizeof(int));
+}
+
 void print_array(const char* title, unsigned long *a, int n)
 {
 	std::cout << "\n" << title << std::endl;
@@ -53,10 +59,34 @@ void print_array(const char* title, unsigned long *a, int n)
 
 int main()
 {	
+	/*
+		Recursion Radix Exchange Sort
+	*/
+	copy_array(array_random, array_copy, MAX_SIZE);
 	std::cout << "=========================================";
-	print_array("Before Radix Exchange Sort by recursion version...", array_random, MAX_SIZE);
-	radix_exchange_sort(array_random, MAX_SIZE);
-	print_array("After Radix Exchange Sort by recursion version...", array_random, MAX_SIZE);
+	print_array("Before Radix Exchange Sort by recursion version...", array_copy, MAX_SIZE);
+	radix_exchange_sort(array_copy, MAX_SIZE);
+	print_array("After Radix Exchange Sort by recursion version...", array_copy, MAX_SIZE);
+	std::cout << std::endl;
+
+	/*
+		Array Stack Radix Exchange Sort
+	*/
+	copy_array(array_random, array_copy, MAX_SIZE);
+	std::cout << "=========================================";
+	print_array("Before Radix Exchange Sort by array stack version...", array_copy, MAX_SIZE);
+	radix_exchange_sort_stack(array_copy, MAX_SIZE);
+	print_array("After Radix Exchange Sort by array stack version...", array_copy, MAX_SIZE);
+	std::cout << std::endl;
+
+	/*
+		Straight Radix Sort
+	*/
+	copy_array(array_random, array_copy, MAX_SIZE);
+	std::cout << "=========================================";
+	print_array("Before Straight Radix Sort ...", array_copy, MAX_SIZE);
+	straight_radix_sort(array_copy, MAX_SIZE);
+	print_array("After Straight Radix Sort ...", array_copy, MAX_SIZE);
 	std::cout << std::endl;
 
 	return 0;
