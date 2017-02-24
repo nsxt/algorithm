@@ -18,7 +18,7 @@ public:
 	ArraySeqMap(int size = 100) 
 	{
 		elems_ = new T[size];
-		assert(elems);
+		assert(elems_);
 
 		max_size_ = size;
 		len_ = 0;
@@ -64,7 +64,7 @@ public:
 		
 		elems_[len_++] = value;
 
-		reutrn true;
+		return true;
 	}
 
 	bool remove(const T& key) 
@@ -93,20 +93,9 @@ public:
 	/**
 		Lookup
 	**/
-	bool find(const T& key)
+	bool find(const T& key, T& found_value)
 	{
 		MapPos pos;
-		pos.index = 0;
-		pos.key = key;
-
-		if (!_find(pos))
-			return false;
-
-		return true;
-	}
-	
-	void find_first(const T& key, T& found_value, MapPos& found_pos) const
-	{
 		pos.index = 0;
 		pos.key = key;
 
@@ -117,8 +106,21 @@ public:
 
 		return true;
 	}
+	
+	bool find_first(const T& key, T& found_value, MapPos& found_pos) const
+	{
+		found_pos.index = 0;
+		found_pos.key = key;
 
-	void find_next(T& found_value, MapPos& found_pos) const
+		if (!_find(found_pos))
+			return false;
+
+		found_value = elems_[found_pos.index];
+
+		return true;
+	}
+
+	bool find_next(T& found_value, MapPos& found_pos) const
 	{
 		found_pos.index++;
 
