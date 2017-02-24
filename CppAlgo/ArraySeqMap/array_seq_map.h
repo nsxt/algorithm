@@ -23,7 +23,7 @@ public:
 		max_size_ = size;
 		len_ = 0;
 	}
-	~ArraySeqMap() 
+	virtual ~ArraySeqMap()
 	{
 		delete[] elems_;
 	}
@@ -57,7 +57,7 @@ public:
 		len_ = 0;
 	}
 
-	bool insert(const T& value) 
+	virtual bool insert(const T& value) 
 	{
 		if (len_ + 1 > max_size_)
 			return false;
@@ -93,7 +93,7 @@ public:
 	/**
 		Lookup
 	**/
-	bool find(const T& key, T& found_value)
+	bool find(const T& key, T& value)
 	{
 		MapPos pos;
 		pos.index = 0;
@@ -102,32 +102,32 @@ public:
 		if (!_find(pos))
 			return false;
 
-		found_value = elems_[pos.index];
+		value = elems_[pos.index];
 
 		return true;
 	}
 	
-	bool find_first(const T& key, T& found_value, MapPos& found_pos) const
+	virtual bool find_first(const T& key, T& value, MapPos& pos) const
 	{
-		found_pos.index = 0;
-		found_pos.key = key;
+		pos.index = 0;
+		pos.key = key;
 
-		if (!_find(found_pos))
+		if (!_find(pos))
 			return false;
 
-		found_value = elems_[found_pos.index];
+		value = elems_[pos.index];
 
 		return true;
 	}
 
-	bool find_next(T& found_value, MapPos& found_pos) const
+	virtual bool find_next(T& value, MapPos& pos) const
 	{
-		found_pos.index++;
+		pos.index++;
 
-		if (!_find(found_pos))
+		if (!_find(pos))
 			return false;
 
-		found_value = elems_[found_pos.index];
+		value = elems_[pos.index];
 
 		return true;
 	}

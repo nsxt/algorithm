@@ -41,6 +41,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ArraySeqMap", "ArraySeqMap\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ListSeqMap", "ListSeqMap\ListSeqMap.vcxproj", "{813934BA-6B45-4D4D-962E-ECABE2C2DEBE}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BinaryArrayMap", "BinaryArrayMap\BinaryArrayMap.vcxproj", "{B0990A9A-1875-47BD-BA34-2C2CD8CADB04}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -201,6 +203,14 @@ Global
 		{813934BA-6B45-4D4D-962E-ECABE2C2DEBE}.Release|x64.Build.0 = Release|x64
 		{813934BA-6B45-4D4D-962E-ECABE2C2DEBE}.Release|x86.ActiveCfg = Release|Win32
 		{813934BA-6B45-4D4D-962E-ECABE2C2DEBE}.Release|x86.Build.0 = Release|Win32
+		{B0990A9A-1875-47BD-BA34-2C2CD8CADB04}.Debug|x64.ActiveCfg = Debug|x64
+		{B0990A9A-1875-47BD-BA34-2C2CD8CADB04}.Debug|x64.Build.0 = Debug|x64
+		{B0990A9A-1875-47BD-BA34-2C2CD8CADB04}.Debug|x86.ActiveCfg = Debug|Win32
+		{B0990A9A-1875-47BD-BA34-2C2CD8CADB04}.Debug|x86.Build.0 = Debug|Win32
+		{B0990A9A-1875-47BD-BA34-2C2CD8CADB04}.Release|x64.ActiveCfg = Release|x64
+		{B0990A9A-1875-47BD-BA34-2C2CD8CADB04}.Release|x64.Build.0 = Release|x64
+		{B0990A9A-1875-47BD-BA34-2C2CD8CADB04}.Release|x86.ActiveCfg = Release|Win32
+		{B0990A9A-1875-47BD-BA34-2C2CD8CADB04}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
