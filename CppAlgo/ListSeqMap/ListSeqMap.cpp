@@ -1,4 +1,4 @@
-// ArraySeqMap.cpp : Defines the entry point for the console application.
+// ListSeqMap.cpp : Defines the entry point for the console application.
 //
 
 #include "stdafx.h"
@@ -6,7 +6,7 @@
 #include <iostream>
 #include <chrono>
 #include <string>
-#include "array_seq_map.h"
+#include "list_seq_map.h"
 
 struct Person {
 	int id_;
@@ -22,14 +22,13 @@ struct Person {
 	unsigned long operator >> (const unsigned long i) const { return id_ >> i; }
 };
 
-
-template ArraySeqMap<Person>;
+template ListSeqMap<Person>;
 
 int main()
 {
-	std::cout << "\n### Array Sequential Search Map Test.\n" << std::endl;
+	std::cout << "\n### List Sequential Search Map Test.\n" << std::endl;
 
-	ArraySeqMap<Person> map(100);
+	ListSeqMap<Person> map;
 	map.insert(Person(5, "Jake"));
 	map.insert(Person(3, "Devil"));
 	map.insert(Person(2, "Slash"));
@@ -40,9 +39,9 @@ int main()
 
 	Person key;
 	Person value;
-	
+
 	/*
-		Find Test
+	Find Test
 	*/
 	std::cout << "\n=========================================" << std::endl;
 	std::cout << "** Find Test **\n" << std::endl;
@@ -54,14 +53,14 @@ int main()
 		std::printf("\tTest(Find) Error \n");
 
 
-	/* 
-		Find First / Find Next Test
+	/*
+	Find First / Find Next Test
 	*/
 	std::cout << "\n=========================================" << std::endl;
 	std::cout << "** Find First / Find Next Test **\n" << std::endl;
 
 	key.id_ = 3;
-	ArraySeqMap<Person>::MapPos pos;
+	ListSeqMap<Person>::MapPos pos;
 	if (map.find_first(key, value, pos)) {
 		do {
 			std::printf("\tTest(FindFirst) id=%d name=%s\n", key.id_, value.name_.c_str());
@@ -70,9 +69,10 @@ int main()
 	else {
 		std::printf("\tTest(FindFirst) Error\n");
 	}
-	
+
+
 	/*
-		Remove Test
+	Remove Test
 	*/
 
 	std::cout << "\n=========================================" << std::endl;
@@ -91,6 +91,6 @@ int main()
 
 	std::cout << "\n=========================================" << std::endl;
 
-	return 0;
+    return 0;
 }
 

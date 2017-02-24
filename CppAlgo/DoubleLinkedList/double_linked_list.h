@@ -124,6 +124,14 @@ public:
 		Modifiers
 	**/
 
+	void clear()
+	{
+		int n = size();
+		for (int i = 0; i < n; i++) {
+			pop_front();
+		}
+	}
+
 	void push_front(const T& value)
 	{
 		insert_after(node_head_, value);
@@ -228,7 +236,7 @@ public:
 		Iterator operations
 	**/
 
-	iterator next(iterator pos)
+	iterator next(iterator pos) const
 	{
 		if (size_ <= 0) {
 			throw EMPTY_LIST;
@@ -264,6 +272,33 @@ public:
 		}
 
 		return static_cast<iterator>(node->prev);
+	}
+
+
+	/**
+		Lookup
+	**/
+
+	iterator find(const T& value, iterator start_pos) const
+	{
+		if (empty())
+			return nullptr;
+
+		Node* node = static_cast<Node*>(start_pos);
+		if (node == node_head_ || node == node_tail_) {
+			return nullptr;
+		}			
+
+		iterator it = start_pos == nullptr ? begin() : start_pos;
+		do {
+			if (value == at(it))
+				return it;
+
+			it = next(it);
+
+		} while (it != nullptr);
+
+		return nullptr;
 	}
 
 
