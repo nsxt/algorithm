@@ -18,6 +18,7 @@ struct Person {
 
 	Person operator = (const Person& other) { id_ = other.id_; name_ = other.name_; return *this; }
 	bool operator == (const Person& other) const { return id_ == other.id_; }
+	bool operator != (const Person& other) const { return id_ != other.id_; }
 	bool operator > (const Person& other) const { return id_ > other.id_; }
 	unsigned long operator >> (const unsigned long i) const { return id_ >> i; }
 };
