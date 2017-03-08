@@ -3,6 +3,18 @@
 #include <cassert>
 #include <cstring>
 
+/*
+	Hash Search Algorithm
+
+	: 중복키가 허용되는 기본 해쉬 검색 알고리즘
+
+- 알고리즘의 핵심적인 기능은 insert 수행 시 Hash Table 의 빈 Bucket 을
+Hash Function 으로 결정하고 Hash 값이 동일할 경우 Cluster 로 그룹화 되어 관리된다.
+Hash Table 에서 Cluster 가 발생 하는 것을 완전히 막을 수는 없으며, 가급적 분포도가 넓은
+해쉬 값을 구하여 Bucket 을 지정하는것이 성늘 개선의 핵심이다.
+
+*/
+
 template<class T, class HASH> class HashMap
 {
 public:

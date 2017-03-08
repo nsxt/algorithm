@@ -1,4 +1,4 @@
-// HashMap.cpp : Defines the entry point for the console application.
+// RadixTreeMap.cpp : Defines the entry point for the console application.
 //
 
 #include "stdafx.h"
@@ -6,38 +6,50 @@
 #include <iostream>
 #include <chrono>
 #include <string>
-#include "hash_map.h"
+#include "radix_tree_map.h"
 
 struct Person {
 	int id_;
 	std::string name_;
 
 	Person() : id_(0) {}
-	Person(int id, const std::string& name) : id_(id), name_(name) {}
-	Person(const Person& other) { id_ = other.id_; name_ = other.name_; }
+	Person(int id, const std::string& name) : id_(id), name_(name) { }
 
-	Person operator = (const Person& other) { id_ = other.id_; name_ = other.name_; return *this; }
+	// Copy Constructor
+	Person(const Person& other) 
+	{ 
+		id_ = other.id_; 
+		name_ = other.name_;
+	}
+
+	// Assignment Operator Overloading
+	Person& operator = (const Person& other) 
+	{ 
+		id_ = other.id_;
+		name_ = other.name_;
+		return *this;
+	}
+
+	/*
+		Relational Operators Overloading
+	*/
 	bool operator == (const Person& other) const { return id_ == other.id_; }
+	bool operator != (const Person& other) const { return !(*this == other); }
 	bool operator > (const Person& other) const { return id_ > other.id_; }
+
+	/*
+		Bitwise Arithmetic Operators Overloading
+	*/
 	unsigned long operator >> (const unsigned long i) const { return id_ >> i; }
-
-	friend class PersonHash;
 };
 
-class PersonHash
-{
-public:
-	unsigned long hash(const Person& p) const { return (unsigned long)p.id_; }
-};
-
-
-template HashMap<Person, PersonHash>;
+template RadixTreeMap<Person>;
 
 int main()
 {
-	std::cout << "\n### Hash Map Test.\n" << std::endl;
+	std::cout << "\n### Radix Tree Map Test.\n" << std::endl;
 
-	HashMap<Person, PersonHash> map(PersonHash(), 10);
+	RadixTreeMap<Person> map;
 	map.insert(Person(5, "Jake"));
 	map.insert(Person(3, "Devil"));
 	map.insert(Person(2, "Slash"));
@@ -48,7 +60,6 @@ int main()
 
 	Person key;
 	Person value;
-
 
 	/*
 		Find Test
@@ -62,23 +73,17 @@ int main()
 	else
 		std::printf("\tTest(Find) Error \n");
 
-
-	/*
-		Find First / Find Next Test
-	*/
-	std::cout << "\n=========================================" << std::endl;
-	std::cout << "** Find First / Find Next Test **\n" << std::endl;
-
 	key.id_ = 3;
-	HashMap<Person, PersonHash>::MapPos pos;
-	if (map.find_first(key, value, pos)) {
-		do {
-			std::printf("\tTest(FindFirst) id=%d name=%s\n", key.id_, value.name_.c_str());
-		} while (map.find_next(value, pos));
-	}
-	else {
-		std::printf("\tTest(FindFirst) Error\n");
-	}
+	if (map.find(key, value))
+		std::printf("\tTest(Find) id=%d name=%s\n", key.id_, value.name_.c_str());
+	else
+		std::printf("\tTest(Find) Error \n");
+
+	key.id_ = 5;
+	if (map.find(key, value))
+		std::printf("\tTest(Find) id=%d name=%s\n", key.id_, value.name_.c_str());
+	else
+		std::printf("\tTest(Find) Error \n");
 
 
 	/*
@@ -101,6 +106,6 @@ int main()
 
 	std::cout << "\n=========================================" << std::endl;
 
-	return 0;
+    return 0;
 }
 
