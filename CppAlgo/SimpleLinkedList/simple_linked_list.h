@@ -255,6 +255,36 @@ public:
 		return static_cast<iterator>(rt);
 	}
 
+	bool is_valid_iter(iterator it) const
+	{
+		if (it == nullptr) return false;
+
+		Node* node = static_cast<Node*>(it);
+		if (node == node_tail_) return false;
+		if (node->next == node_tail_) return false;
+
+		return true;
+	}
+
+	iterator find(const T& val, iterator start_after = nullptr)
+	{
+		iterator it;
+		if (!is_valid_iter(start_after))
+			it = begin();
+		else
+			it = start_after;
+
+		while (it) {
+			T d = at(it);
+			if (d == val)
+				break;
+
+			it = next(it);
+		}
+
+		return it;
+	}
+
 protected:
 	Node* node_head_;
 	Node* node_tail_;

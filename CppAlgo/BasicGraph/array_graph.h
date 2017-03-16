@@ -52,15 +52,9 @@ public:
 		return true;					
 	}
 
-	virtual void visit(const VERTEX& v)
-	{
+	virtual void visit(const VERTEX& v) {}
 
-	}
-
-	virtual void visit_edge(const VERTEX& v1, const VERTEX& v2)
-	{
-
-	}
+	virtual void visit_edge(const VERTEX& v1, const VERTEX& v2) {}
 
 	void dfs()
 	{
@@ -141,7 +135,56 @@ public:
 			}
 		}
 
+		delete[] visited;	
+	}
+
+	// 그래프의 연결 요소 카운팅
+	long count_components()
+	{
+		long count = 0;
+		long i, j, k;
+		ListStack<long> stack;
+		bool* visited = new bool[count_];
+
+		for (i = 0; i < count_; i++)
+			visited[i] = false;
+
+		for (i = 0; i < count_; i++) {
+			if (!visited[i]) {
+				
+				count++;
+
+				stack.push(i);
+				visited[i] = true;
+
+				while (!stack.empty()) {
+					k = stack.pop();
+					for (j = 0; j < count_; j++)
+						if (_get_edge_by_index(k, j) != 0 && !visited[j]) {
+							stack.push(j);
+							visited[j] = true;
+						}
+				}
+			}
+		}
+
 		delete[] visited;
+
+		return count;
+	}
+	
+	void find_ap(SimpleLinkedList<VERTEX>& ap_list)
+	{
+		long* porder = new long[count_];
+		long son_of_root = 0;
+
+		std::memset(porder, 0, count_ * sizeof(long));
+
+		_find_ap(0, 1, ap_list, porder, son_of_root);
+		delete[] porder;
+
+		if (son_of_root > 1)
+			ap_list.push_front(vertices_[0]);
 	}
 
 protected:
@@ -191,6 +234,44 @@ protected:
 			if (_get_edge_by_index(i, j) != 0 && !visited[j])
 				_dfs(j, visited);
 		}
+	}
+
+	long _find_ap(long i, long order, SimpleLinkedList<VERTEX>& ap_list, long* porder, long& son_of_root)
+	{
+		long min, m;
+
+		porder[i] = min = ++order;
+
+		for (int j = 0; j < count_; j++) {
+			if (_get_edge_by_index(i, j) != 0) {
+
+				// Tree-Edge
+				if (porder[j] == 0) {
+
+					// Root 의 자식을 카운트
+					if (i == 0)
+						son_of_root++;
+
+					m = _find_ap(j, order, ap_list, porder, son_of_root);
+
+					if (m < min)
+						min = m;
+
+					// Articulation Points
+					if (m >= porder[i] && i != 0) {
+						if (!ap_list.find(vertices_[i]))
+							ap_list.push_front(vertices_[i]);
+					}
+				}
+				// Non-Tree Edge
+				else {
+					if (porder[j] < min)
+						min = porder[j];
+				}
+			}
+		}
+
+		return min;
 	}
 
 protected:

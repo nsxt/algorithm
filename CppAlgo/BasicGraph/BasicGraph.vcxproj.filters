@@ -27,6 +27,9 @@
     <ClInclude Include="array_graph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="list_graph.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
