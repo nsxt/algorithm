@@ -261,6 +261,7 @@ protected:
 				if (i == 0)
 					son_of_root++;
 
+				// DFS Å½»ö
 				m = _find_ap(k, order, ap_list, porder, son_of_root);
 
 				if (m < min)
