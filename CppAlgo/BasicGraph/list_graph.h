@@ -207,6 +207,31 @@ public:
 			ap_list.push_front(vertices_[0].vertex);
 	}
 
+
+	EDGE mcst_pfs()
+	{
+
+	}
+
+
+	EDGE mcst_kruskal()
+	{
+
+	}
+
+
+	void shortest_path_pfs(const VERTEX& start)
+	{
+
+	}
+
+
+	void shortest_path_dijkstra(const VERTEX& start)
+	{
+
+	}
+	
+
 protected:
 	long _find_vertex(const VERTEX& v)
 	{
