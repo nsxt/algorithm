@@ -17,6 +17,7 @@ class ACharGraph : public ArrayGraph<char>
 public:
 	ACharGraph(int size = 100) : ArrayGraph<char>(size) {}
 	void visit(const char& v) override { std::cout << v << " "; }
+	void visit_edge(const char& v1, const char& v2) { std::cout << v1 << v2; }
 };
 
 class LCharGraph : public ListGraph<char>
@@ -24,6 +25,7 @@ class LCharGraph : public ListGraph<char>
 public:
 	LCharGraph(int size = 100) : ListGraph<char>(size) {}
 	void visit(const char& v) override { std::cout << v << " "; }
+	void visit_edge(const char& v1, const char& v2) { std::cout << v1 << v2; }
 };
 
 void lg_search()
@@ -131,6 +133,87 @@ void ag_search()
 	std::cout << std::endl;
 }
 
+
+void lg_weighted()
+{
+	printf("Weighted ListGraph\n");
+	LCharGraph lg;
+	lg.add_edge('A', 'B', 4);
+	lg.add_edge('A', 'C', 1);
+	lg.add_edge('A', 'D', 2);
+	lg.add_edge('A', 'E', 3);
+	lg.add_edge('B', 'F', 4);
+	lg.add_edge('C', 'D', 2);
+	lg.add_edge('D', 'F', 4);
+	lg.add_edge('D', 'G', 4);
+	lg.add_edge('E', 'F', 4);
+	lg.add_edge('F', 'J', 2);
+	lg.add_edge('F', 'K', 4);
+	lg.add_edge('G', 'H', 3);
+	lg.add_edge('G', 'I', 3);
+	lg.add_edge('G', 'J', 4);
+	lg.add_edge('H', 'I', 2);
+	lg.add_edge('I', 'J', 2);
+	lg.add_edge('J', 'K', 1);
+
+	printf("MCST: Priority First Search = ");
+	LCharGraph::EDGE w = lg.mcst_pfs();
+	printf("  (%d)\n", w);
+
+	printf("MCST: Kruskal Algorithm = ");
+	w = lg.mcst_kruskal();
+	printf("  (%d)\n", w);
+
+	printf("Shortest Path: Priority First Search = ");
+	lg.shortest_path_pfs('A');
+	printf("\n");
+
+	printf("Shortest Path: Dijkstra = ");
+	lg.shortest_path_dijkstra('A');
+	printf("\n");
+
+}
+
+void ag_weighted()
+{
+	printf("Weighted ArrayGraph\n");
+	ACharGraph ag;
+	ag.add_edge('A', 'B', 4);
+	ag.add_edge('A', 'C', 1);
+	ag.add_edge('A', 'D', 2);
+	ag.add_edge('A', 'E', 3);
+	ag.add_edge('B', 'F', 4);
+	ag.add_edge('C', 'D', 2);
+	ag.add_edge('D', 'F', 4);
+	ag.add_edge('D', 'G', 4);
+	ag.add_edge('E', 'F', 4);
+	ag.add_edge('F', 'J', 2);
+	ag.add_edge('F', 'K', 4);
+	ag.add_edge('G', 'H', 3);
+	ag.add_edge('G', 'I', 3);
+	ag.add_edge('G', 'J', 4);
+	ag.add_edge('H', 'I', 2);
+	ag.add_edge('I', 'J', 2);
+	ag.add_edge('J', 'K', 1);
+
+	printf("Priority First Search = ");
+	ACharGraph::EDGE w = ag.mcst_pfs();
+	printf("  (%d)\n", w);
+
+	printf("Kruskal Algorithm = ");
+	w = ag.mcst_kruskal();
+	printf("  (%d)\n", w);
+
+	printf("Shortest Path: Priority First Search = ");
+	ag.shortest_path_pfs('A');
+	printf("\n");
+
+	printf("Shortest Path: Dijkstra = ");
+	ag.shortest_path_dijkstra('A');
+	printf("\n");
+}
+
+
 int main()
 {
 	ag_search();
@@ -138,6 +221,14 @@ int main()
 	std::cout << "\n\n";
 
 	lg_search();
+
+	std::cout << "\n\n";
+
+	ag_weighted();
+
+	std::cout << "\n\n";
+
+	lg_weighted();
 
     return 0;
 }

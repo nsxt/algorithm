@@ -187,6 +187,194 @@ public:
 			ap_list.push_front(vertices_[0]);
 	}
 
+	EDGE mcst_pfs()
+	{
+		long i, j, k;
+		EdgeHeap<char> pq;
+		EdgeHeap<char>::Pair p;
+		EDGE sum = 0;
+		bool* visited = new bool[count_];
+
+		for (i = 0; i < count_; i++)
+			visited[i] = false;
+
+		for (i = 0; i < count_; i++) {
+			if (!visited[i]) {
+				pq.insert(vertices_[i], vertices_[i], 0);
+				visited[i] = true;
+
+				while (!pq.empty()) {
+					p = pq.extract();
+
+					if (p.v1 != p.v2) {
+						visit_edge(p.v1, p.v2);
+						sum += -p.w;
+					}
+					k = _find_vertex(p.v2);
+
+					for (j = 0; j < count_; j++) {
+						if (_get_edge_by_index(k, j) != 0) {
+							if (!visited[j]) {
+								pq.insert(vertices_[k], vertices_[j], -_get_edge_by_index(k, j));
+								visited[j] = true;
+							}
+							else {
+								pq.update(vertices_[k], vertices_[j], -_get_edge_by_index(k, j));
+							}
+						}
+					}
+				}
+			}
+		}
+
+		delete[] visited;
+		return sum;
+	}
+
+	EDGE mcst_kruskal()
+	{
+		EdgeHeap<char> pq;
+		Set<char> set;
+		int i, j;
+		EDGE sum = 0;
+		int edge_count = 0;
+
+		// insert  all edges to heap
+		for (i = 0; i < count_; i++) {
+			for (j = i + 1; j < count_; j++) {
+				if (_get_edge_by_index(i, j)) {
+					pq.insert(vertices_[i], vertices_[j], -_get_edge_by_index(i, j));
+				}
+			}
+		}
+
+		// mcst 의 간선수는 정점수 - 1
+		while (!pq.empty() && edge_count < count_ - 1) {
+			
+			EdgeHeap<char>::Pair p = pq.extract();
+
+			int i1 = set.find(p.v1);
+			if (i1 < 0)
+				i1 = set.add_set(p.v1);
+
+			int i2 = set.find(p.v2);
+			if (i2 < 0)
+				i2 = set.add_set(p.v2);
+
+			// 회로가 아니라면
+			if (i1 >= 0 && i2 >= 0 && i1 != i2) {
+				visit_edge(p.v1, p.v2);
+				edge_count++;
+				sum += -p.w;
+				set.union_by_index(i1, i2);
+			}
+		}
+
+		return sum;
+	}
+
+	void shortest_path_pfs(const VERTEX& start)
+	{
+		long i, j, k;
+		EdgeHeap<char> pq;
+		EdgeHeap<char>::Pair p;
+		EDGE sum = 0;
+		bool* visited = new bool[count_];
+
+		for (i = 0; i < count_; i++)
+			visited[i] = false;
+
+		i = _find_vertex(start);
+		
+		pq.insert(vertices_[i], vertices_[i], 0);
+		visited[i] = true;
+
+		while (!pq.empty()) {
+			p = pq.extract();
+
+			if (p.v1 != p.v2) {
+				visit_edge(p.v1, p.v2);
+				sum += -p.w;
+			}
+			k = _find_vertex(p.v2);
+
+			for (j = 0; j < count_; j++) {
+				if (_get_edge_by_index(k, j) != 0) {
+					if (!visited[j]) {
+						pq.insert(vertices_[k], vertices_[j], p.w - _get_edge_by_index(k, j));
+						visited[j] = true;
+					}
+					else {
+						pq.update(vertices_[k], vertices_[j], p.w - _get_edge_by_index(k, j));
+					}
+				}
+			}
+		}
+
+		delete[] visited;
+	}
+
+	void shortest_path_dijkstra(const VERTEX& start)
+	{
+		int i;
+		int count = 0;
+		int x, y;
+		int s = _find_vertex(start);
+		bool* visited = new bool[count_];
+		EDGE* distance = new EDGE[count_];
+		int* parent = new int[count_];
+
+		for (i = 0; i < count_; i++) {
+			visited[i] = false;
+			distance[i] = _get_edge_by_index(s, i);
+
+			if (i != s)
+				parent[i] = s;
+			else
+				parent[i] = -1;
+		}
+
+		visited[s] = true;
+		count++;
+
+		while (count < count_) {
+			x = 0;
+			
+			while (visited[x])
+				x++;
+
+			for (i = x; i < count_; i++) {
+				if (!visited[i] && distance[i] > 0 && distance[i] < distance[x])
+					x = i;
+			}
+
+			visited[x] = true;
+			count++;
+
+			for (y = 0; y < count_; y++) {
+				if (x == y || _get_edge_by_index(x, y) == 0 || visited[y])
+					continue;
+
+				EDGE d = distance[x] + _get_edge_by_index(x, y);
+				if (distance[y] == 0 || d < distance[y]) {
+					distance[y] = d;
+					parent[y] = x;
+				}
+			}
+		}
+
+		// visit edge
+		for (i = 0; i < count_; i++) {
+			if (parent[i] >= 0)
+				visit_edge(vertices_[parent[i]], vertices_[i]);
+		}
+
+		delete[] visited;
+		delete[] distance;
+		delete[] parent;
+	}
+
+
 protected:
 	long _find_vertex(const VERTEX& v)
 	{

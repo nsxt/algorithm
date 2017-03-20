@@ -74,7 +74,7 @@ public:
 		return true;
 	}
 
-	Pair Extract()
+	Pair extract()
 	{
 		Pair p = at(1);
 		at(1) = at(len_--);

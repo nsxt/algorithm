@@ -50,7 +50,9 @@ public:
 
 	int find(const T& t)
 	{
-		for (int i = 0; i < len_ && elems_[i].elem != t; i++);
+		int i;
+
+		for (i = 0; i < len_ && elems_[i].elem != t; i++);
 
 		if (i >= len_)
 			return -1;
