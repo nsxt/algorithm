@@ -26,7 +26,9 @@ public:
     // 매트릭스 배열을 90 도 회전
     void rotate_right()
     {
-
+        for (int i = 0; i < dimension_; i++) {
+            int temp;
+        }
     }
 
     void print()
